@@ -1,0 +1,26 @@
+{
+  "name": "hnraytek/flame-auth",
+  "description": "flame auth middleware",
+  "type": "library",
+  "require": {
+    "php": ">=8.1",
+    "hnraytek/flame-module-kernel": "^1.0.0"
+  },
+  "license": "Apache-2.0",
+  "autoload": {
+    "psr-4": {
+      "FlameModule\\Auth\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "haoshuaioo",
+      "email": "bbmu@qq.com"
+    }
+  ],
+  "extra": {
+    "flame": {
+      "module": "FlameModule\\Auth\\Auth"
+    }
+  }
+}
