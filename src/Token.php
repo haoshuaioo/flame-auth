@@ -32,9 +32,49 @@ class Token extends BaseService
      */
     public function getRequestToken(): string
     {
-        $tokenName = Auth::config()->get('token_name', '');
-        if (!$tokenName) return '';
+        return $this->getCurrentToken(Auth::config()->get('token_name', ''));
+    }
+
+    /**
+     * 创建用户Token
+     *
+     * @param string $type Type
+     * @param int $userId 用户ID
+     * @param int|null $expire 过期时间（秒），null 使用默认值，0 永不过期
+     * @param bool $force 强制创建，如果为false则不会删除旧token
+     * @return string Token
+     * @throws InvalidTokenArgumentException
+     */
+    public function create(string $type, int $userId, ?int $expire = null, bool $force = true): string
+    {
+        if (!$type) throw new InvalidTokenArgumentException('invalid token type');
+        if (!$expire) $expire = Auth::config()->get('expire', 7 * 24 * 3600);
+        if ($force) $this->clear($userId, $type);
+        $token = self::generateToken();
+        $this->set($token, $type, $userId, $expire);
+        return $token;
+    }
+
+    /**
+     * 获取当前请求的token
+     * @param string $tokenName token名称
+     * @return string
+     */
+    public function getCurrentToken(string $tokenName): string
+    {
+        if (empty($tokenName)) return '';
         return $this->app->request->header($tokenName, '');
+    }
+
+    /**
+     * 获取当前请求的token数据
+     * @return array|null
+     */
+    public function getCurrentTokenData(): ?array
+    {
+        $token = $this->getRequestToken();
+        if (!$token) return null;
+        return $this->get($token);
     }
 
     /**
@@ -44,6 +84,7 @@ class Token extends BaseService
      * @param int $userId 用户ID
      * @param int|null $expire 过期时间（秒），null 使用默认值，0 永不过期
      * @return bool
+     * @throws InvalidTokenArgumentException
      */
     public function set(string $token, string $type, int $userId, ?int $expire = null): bool
     {
