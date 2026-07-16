@@ -27,15 +27,6 @@ class Token extends BaseService
     }
 
     /**
-     * 获取请求 token
-     * @return string
-     */
-    public function getRequestToken(): string
-    {
-        return $this->getCurrentToken(Auth::config()->get('token_name', ''));
-    }
-
-    /**
      * 创建用户Token
      *
      * @param string $type Type
@@ -56,11 +47,31 @@ class Token extends BaseService
     }
 
     /**
+     * 获取请求 token
+     * @return string
+     */
+    public function getRequestToken(): string
+    {
+        return $this->getToken(Auth::config()->get('token_name', ''));
+    }
+
+    /**
+     * 获取请求 token 数据
+     * @return array|null
+     */
+    public function getRequestTokenData(): ?array
+    {
+        $token = $this->getRequestToken();
+        if (!$token) return null;
+        return $this->get($token);
+    }
+
+    /**
      * 获取当前请求的token
      * @param string $tokenName token名称
      * @return string
      */
-    public function getCurrentToken(string $tokenName): string
+    public function getToken(string $tokenName): string
     {
         if (empty($tokenName)) return '';
         return $this->app->request->header($tokenName, '');
@@ -68,11 +79,12 @@ class Token extends BaseService
 
     /**
      * 获取当前请求的token数据
+     * @param string $tokenName
      * @return array|null
      */
-    public function getCurrentTokenData(): ?array
+    public function getTokenData(string $tokenName): ?array
     {
-        $token = $this->getRequestToken();
+        $token = $this->getToken($tokenName);
         if (!$token) return null;
         return $this->get($token);
     }

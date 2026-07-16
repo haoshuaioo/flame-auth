@@ -33,7 +33,7 @@ class AuthApiController extends BaseApiController
     protected function initToken(): void
     {
         // 从请求中获取用户 ID
-        $tokenData = $this->tokenManager->getCurrentTokenData();
+        $tokenData = $this->tokenManager->getTokenData($this->getTokenType());
         if ($tokenData && isset($tokenData['type']) && $tokenData['type'] == $this->getTokenType()) {
             $this->userId = $tokenData['user_id'];
             $this->token = $tokenData['token'];
