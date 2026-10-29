@@ -1,5 +1,9 @@
 ## [FlameAuth](https://github.com/haoshuaioo/flame-auth) Change Log
 
+## v1.0.3
+- 新增 token 方法
+- 优化 IO 操作
+
 ## v1.0.2
 
 - 新增 getRequestTokenData() 获取当前请求的tokenData

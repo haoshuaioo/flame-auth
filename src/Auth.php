@@ -47,7 +47,7 @@ class Auth extends BaseModuleService
             'expire' => 7 * 24 * 3600,
             // sql 链接名称，不指定则使用默认链接
             'name' => '',
-        ], true);
+        ]);
     }
 
     /**
